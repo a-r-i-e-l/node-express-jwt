@@ -13,19 +13,16 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({error: 'Access unauthorized. No credentials were supplied'})
   }
   const bearerToken = req.headers.authorization!.substring(7)
-  jwt.verify(
-    bearerToken,
-    SECRET_KEY,
-    {algorithms: ['HS256']},
-    (err: jwt.VerifyErrors | null, decoded?: jwt.JwtPayload) => {
-      if (err) {
-        return res.status(403).json({error: 'Access forbidden. Invalid credentials were supplied'})
-      }
-      console.log(decoded)
-      console.log(req.body)
-      next()
+  console.log({bearerToken})
+  jwt.verify(bearerToken, SECRET_KEY, (err: jwt.VerifyErrors | null, decoded?: jwt.JwtPayload) => {
+    if (err) {
+      return res.status(403).json({error: 'Access forbidden. Invalid credentials were supplied'})
     }
-  )
+    if (decoded && decoded.data !== req.body.data) {
+      return res.status(403).json({error: 'Access forbidden. Invalid payload'})
+    }
+    next()
+  })
 }
 
 router.route('/api').post(authenticateToken, (req: Request, res: Response) => {

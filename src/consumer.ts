@@ -25,30 +25,9 @@ consumerApp.get('/test2', async (req, res) => {
 consumerApp.get('/', async (req, res) => {
   const payload = {
     data: 'Ariel',
-    // iat: Math.floor(Date.now() / 1000) + 60 * 60,
-    // exp: Math.floor(Date.now() / 1000) + 60,
   }
-  let e = ''
-  // const token = jwt.sign(payload, SECRET_KEY, {expiresIn: '10s'})
-  const token = jwt.sign(
-    payload,
-    SECRET_KEY,
-    {algorithm: 'HS256'},
-    (err: Error | null, encoded?: string) => {
-      console.log({encoded})
-      e = encoded ? encoded : 'nop'
-      jwt.verify(e, SECRET_KEY, (err: jwt.VerifyErrors | null, decoded?: jwt.JwtPayload) => {
-        if (err) {
-          console.log('errorrorororrrrr')
-        }
-        console.log({decoded})
-      })
-    }
-  )
-
-  console.log('consumer token')
-  console.log(token)
-  console.log('consumer token')
+  const token = jwt.sign(payload, SECRET_KEY, {expiresIn: '5s'})
+  console.log({token})
 
   const test = await fetch('http://localhost:3003/api', {
     method: 'POST',
