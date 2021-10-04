@@ -69,8 +69,4 @@ router.route('/api').post(authenticateToken, express.json(), (req: Request, res:
   console.log('body2:', req.body)
 })
 
-router.route('/test').get((req, res) => {
-  res.json({message: 'you got it'})
-})
-
 supplierApp.use('/', router)
