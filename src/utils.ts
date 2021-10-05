@@ -10,8 +10,9 @@ export const stringifySort = (_: any, value: any) => {
     .reduce((obj: any, key: any) => ((obj[key] = value[key]), obj), {})
 }
 
+// Other functions that could be used to order the object keys:
+/*
 {
-  // Other functions that could be used to order the object keys:
   const iterations = 1000000
   const example = {
     c: [{a: 1}, {b: 2}, {c: 3}],
@@ -98,7 +99,7 @@ export const stringifySort = (_: any, value: any) => {
     return result
   }
 
-  /*
+ 
   console.time('Function: replacer')
   for (let i = 0; i < iterations; i++) {
     JSON.stringify(example, replacer, 2)
@@ -132,5 +133,5 @@ export const stringifySort = (_: any, value: any) => {
     JSON.stringify(sort(example), null, 2)
   }
   console.timeEnd('Function: ')
-  */
 }
+*/
