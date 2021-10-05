@@ -3,7 +3,16 @@ import * as jwt from 'jsonwebtoken'
 import * as crypto from 'crypto'
 import {stringifySort} from './utils'
 
-const SECRET_KEY = 'secretKey'
+const PUBLIC_KEY = [
+  '-----BEGIN PUBLIC KEY-----',
+  'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKxkzOrZub0Uyz12vTklnjWMLjxRigxn',
+  'r7yKGQoOPMqqdfkKIdZF4u+Q9Jj6VUWGqUfw9lFwDuYdBguYGEb7Fx8CAwEAAQ==',
+  '-----END PUBLIC KEY-----',
+].join('\n')
+
+const i = 'Mysoft corp' // Issuer
+const s = 'some@user.com' // Subject
+const a = 'http://mysoftcorp.in' // Audience
 
 export const supplierApp = express()
 supplierApp.use(express.json())
@@ -17,8 +26,13 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const bearerToken = req.headers.authorization!.substring(7)
   jwt.verify(
     bearerToken,
-    SECRET_KEY,
-    //{algorithms: ['ES256']},
+    PUBLIC_KEY,
+    {
+      algorithms: ['RS256'],
+      // issuer: i,
+      // subject: s,
+      // audience: a,
+    },
     (err: jwt.VerifyErrors | null, decoded?: jwt.JwtPayload) => {
       if (err) {
         return res.status(403).json({error: 'Access forbidden. Invalid credentials were supplied'})
