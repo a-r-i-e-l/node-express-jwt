@@ -2,6 +2,7 @@ import express, {json} from 'express'
 import fetch from 'node-fetch'
 import * as jwt from 'jsonwebtoken'
 import * as crypto from 'crypto'
+import {stringifySort} from './utils'
 
 const SECRET_KEY = 'secretKey'
 
@@ -13,12 +14,11 @@ consumerApp.get('/', async (req, res) => {
     foo: 'bar',
   }
 
-  const body = JSON.stringify(payload)
+  const body = JSON.stringify(payload, stringifySort)
 
   const hash = crypto.createHash('sha1').update(body).digest('hex')
 
   const token = jwt.sign({hash}, SECRET_KEY, {expiresIn: '5s'})
-  console.log({token})
 
   const test = await fetch('http://localhost:3003/api', {
     method: 'POST',
