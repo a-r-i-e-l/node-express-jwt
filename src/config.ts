@@ -1,0 +1,1 @@
+export const EXPIRATION_TIME_IN_SECONDS = 20

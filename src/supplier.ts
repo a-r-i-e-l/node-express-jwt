@@ -2,6 +2,7 @@ import express, {NextFunction, Request, Response} from 'express'
 import * as jwt from 'jsonwebtoken'
 import * as crypto from 'crypto'
 import {stringifySort} from './utils'
+import {EXPIRATION_TIME_IN_SECONDS} from './config'
 
 const PUBLIC_KEY = [
   '-----BEGIN PUBLIC KEY-----',
@@ -17,6 +18,11 @@ const a = 'http://mysoftcorp.in' // Audience
 export const supplierApp = express()
 supplierApp.use(express.json())
 const router = express.Router()
+
+const isValidExp = (decoded: jwt.JwtPayload) => {
+  const {iat, exp} = decoded
+  return iat && exp && exp - iat <= EXPIRATION_TIME_IN_SECONDS
+}
 
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const barerHeader = req.headers.authorization
@@ -36,6 +42,16 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     (err: jwt.VerifyErrors | null, decoded?: jwt.JwtPayload) => {
       if (err) {
         return res.status(403).json({error: 'Access forbidden. Invalid credentials were supplied'})
+      }
+
+      if (!decoded) {
+        return res.status(403).json({error: 'Access forbidden. Invalid credentials were supplied'})
+      }
+
+      if (!isValidExp(decoded)) {
+        return res
+          .status(403)
+          .json({error: "Access forbidden. Expiration time claim ('exp') is too far in the future"})
       }
 
       const body = JSON.stringify(req.body, stringifySort)

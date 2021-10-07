@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import * as jwt from 'jsonwebtoken'
 import * as crypto from 'crypto'
 import {stringifySort} from './utils'
+import {EXPIRATION_TIME_IN_SECONDS} from './config'
 
 const PRIVATE_KEY = [
   '-----BEGIN RSA PRIVATE KEY-----',
@@ -36,7 +37,7 @@ consumerApp.get('/', async (req, res) => {
     // issuer: i,
     // subject: s,
     // audience: a,
-    expiresIn: '10s',
+    expiresIn: `${EXPIRATION_TIME_IN_SECONDS}s`,
     algorithm: 'RS256',
   })
   // {expiresIn: '5s', algorithm: 'RS256'})
