@@ -2,8 +2,8 @@
 
 Understanding JWT
 
-The Backend that consumes the data is running in http://localhost:3004/
-The endpoint of the data supplier backend is: http://localhost:3003/api
+- The Backend that consumes the data is running in http://localhost:3004/
+- The endpoint of the data supplier backend is: http://localhost:3003/api
 
 ## Key Generation
 
